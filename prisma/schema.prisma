@@ -1,0 +1,380 @@
+// Enterprise AI Support Dashboard Database Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Core User Management
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          UserRole  @default(SUPPORT_AGENT)
+  password      String?
+  avatar        String?
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts        Account[]
+  sessions        Session[]
+  assignedTickets Ticket[]  @relation("TicketAssignee")
+  activities      Activity[]
+  agentMetrics    AgentMetrics?
+  notifications   Notification[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  C_LEVEL
+  CS_MANAGER
+  SUPPORT_AGENT
+}
+
+// NextAuth.js Required Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Customer Management
+model Customer {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  company     String?
+  phone       String?
+  tier        CustomerTier @default(STANDARD)
+  riskScore   Int      @default(50)
+  totalTickets Int     @default(0)
+  resolvedTickets Int  @default(0)
+  avgResolutionHours Float @default(0)
+  lastContact DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tickets     Ticket[]
+  riskInsights RiskInsight[]
+
+  @@map("customers")
+}
+
+enum CustomerTier {
+  ENTERPRISE
+  PREMIUM
+  STANDARD
+  BASIC
+}
+
+// Ticket Management System
+model Ticket {
+  id              String        @id @default(cuid())
+  ticketNumber    String        @unique
+  subject         String
+  description     String        @db.Text
+  priority        TicketPriority @default(MEDIUM)
+  status          TicketStatus   @default(OPEN)
+  category        String?
+  tags            String[]
+
+  // SLA Tracking
+  slaDeadline     DateTime?
+  responseTime    Int?          // minutes from creation to first response
+  resolutionTime  Int?          // minutes from creation to resolution
+  isBreached      Boolean       @default(false)
+
+  // Assignment
+  customerId      String
+  assigneeId      String?
+
+  // AI Integration
+  aiAnalysis      Json?         // AI-generated insights
+  aiSuggestions   String[]
+  sentiment       String?       // positive, negative, neutral
+  aiResolved      Boolean       @default(false)
+
+  // External Integration
+  jiraIssueKey    String?
+  zohoDeskId      String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  resolvedAt      DateTime?
+
+  // Relations
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  assignee        User?         @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  activities      Activity[]
+  comments        Comment[]
+  attachments     Attachment[]
+
+  @@map("tickets")
+}
+
+enum TicketPriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING
+  RESOLVED
+  CLOSED
+  ESCALATED
+}
+
+// Activity Logging
+model Activity {
+  id          String   @id @default(cuid())
+  type        ActivityType
+  description String
+  metadata    Json?
+
+  ticketId    String?
+  userId      String
+
+  createdAt   DateTime @default(now())
+
+  // Relations
+  ticket      Ticket?  @relation(fields: [ticketId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("activities")
+}
+
+enum ActivityType {
+  TICKET_CREATED
+  TICKET_ASSIGNED
+  TICKET_UPDATED
+  TICKET_RESOLVED
+  COMMENT_ADDED
+  STATUS_CHANGED
+  PRIORITY_CHANGED
+  SLA_BREACHED
+  AI_SUGGESTION
+  JIRA_LINKED
+}
+
+// Comments System
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  isInternal Boolean @default(false)
+
+  ticketId  String
+  authorId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+// File Attachments
+model Attachment {
+  id        String   @id @default(cuid())
+  filename  String
+  filepath  String
+  filesize  Int
+  mimetype  String
+
+  ticketId  String
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
+
+// Agent Performance Metrics
+model AgentMetrics {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+
+  // Daily Stats
+  ticketsOpen           Int      @default(0)
+  ticketsInProgress     Int      @default(0)
+  ticketsResolved       Int      @default(0)
+  ticketsEscalated      Int      @default(0)
+
+  // Performance Stats
+  avgResponseTime       Float    @default(0) // hours
+  avgResolutionTime     Float    @default(0) // hours
+  firstContactResolution Float   @default(0) // percentage
+  customerSatisfaction  Float    @default(0) // rating out of 5
+
+  // AI Integration Stats
+  aiAssistedTickets     Int      @default(0)
+  aiSuccessRate         Float    @default(0) // percentage
+
+  // Workload
+  currentWorkload       Int      @default(0)
+  maxCapacity          Int      @default(20)
+
+  // Performance Rating
+  performanceScore      Float    @default(0) // calculated score
+  status               AgentStatus @default(ACTIVE)
+
+  lastUpdated          DateTime @updatedAt
+  dateRecorded         DateTime @default(now())
+
+  // Relations
+  user                 User     @relation(fields: [userId], references: [id])
+
+  @@map("agent_metrics")
+}
+
+enum AgentStatus {
+  TOP_PERFORMER
+  ACTIVE
+  AVERAGE
+  NEEDS_IMPROVEMENT
+  OVERLOADED
+}
+
+// SLA Configuration
+model SLARule {
+  id                  String        @id @default(cuid())
+  name                String
+  priority            TicketPriority
+  customerTier        CustomerTier?
+  responseTimeMinutes Int           // minutes to respond
+  resolutionTimeHours Int           // hours to resolve
+  isActive            Boolean       @default(true)
+
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@map("sla_rules")
+}
+
+// Risk Assessment
+model RiskInsight {
+  id          String   @id @default(cuid())
+  customerId  String
+  riskScore   Int      // 0-100
+  riskFactors String[] // array of risk indicators
+  aiAnalysis  Json?    // AI-generated risk analysis
+
+  createdAt   DateTime @default(now())
+
+  // Relations
+  customer    Customer @relation(fields: [customerId], references: [id])
+
+  @@map("risk_insights")
+}
+
+// Real-time Notifications
+model Notification {
+  id        String            @id @default(cuid())
+  title     String
+  message   String            @db.Text
+  type      NotificationType
+  priority  NotificationPriority @default(MEDIUM)
+  isRead    Boolean           @default(false)
+
+  userId    String
+  ticketId  String?
+
+  createdAt DateTime          @default(now())
+  readAt    DateTime?
+
+  // Relations
+  user      User              @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  TICKET_ASSIGNED
+  TICKET_ESCALATED
+  SLA_BREACH
+  URGENT_TICKET
+  SYSTEM_ALERT
+  AI_RECOMMENDATION
+}
+
+enum NotificationPriority {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+// System Configuration
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  type      String   // string, number, boolean, json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+// Dashboard Analytics (for caching)
+model DashboardMetrics {
+  id                    String   @id @default(cuid())
+  metricType            String   // sla_overview, agent_performance, etc.
+  data                  Json     // cached metric data
+  role                  UserRole // which role this metric is for
+
+  lastCalculated        DateTime @default(now())
+  expiresAt            DateTime
+
+  @@unique([metricType, role])
+  @@map("dashboard_metrics")
+}
