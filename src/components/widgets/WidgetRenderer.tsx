@@ -20,6 +20,7 @@ import { AgentPerformanceStatsWidget } from './AgentPerformanceStatsWidget';
 import { KnowledgeBaseSearchWidget } from './KnowledgeBaseSearchWidget';
 import { KnowledgeArticleWidget } from './KnowledgeArticleWidget';
 import { MessageComposerWidget } from './MessageComposerWidget';
+import { EscalationPathWidget } from './EscalationPathWidget';
 
 interface WidgetRendererProps {
   type: WidgetType;
@@ -93,6 +94,9 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
 
       case 'message-composer':
         return <MessageComposerWidget data={data as any} onAction={onAction} />;
+
+      case 'escalation-path':
+        return <EscalationPathWidget data={data as any} />;
 
       default:
         // Fallback for unimplemented widgets
