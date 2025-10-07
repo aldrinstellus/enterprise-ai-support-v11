@@ -1860,6 +1860,89 @@ export const knowledgeBaseSearchDemo: KnowledgeBaseSearchData = {
     'Based on your current ticket (#4521), I recommend starting with KB-892 which covers Okta-specific troubleshooting. The section on "Invalid Credentials with Correct Password" is particularly relevant.',
 };
 
+// Support Agent: Password Reset Article (for demo scenario)
+export const passwordResetArticleDemo: KnowledgeArticleData = {
+  id: 'KB-1847',
+  title: 'How to Reset Your Password',
+  category: 'Account Access',
+  lastUpdated: '2 days ago',
+  author: 'Support Team',
+  views: 12453,
+  rating: 4.8,
+  tags: ['password', 'login', 'security', 'account-access', 'reset'],
+  sections: [
+    {
+      heading: 'Quick Reset Steps',
+      content: '',
+      type: 'list',
+      items: [
+        'Go to the login page and click "Forgot Password"',
+        'Enter your registered email address',
+        'Check your inbox for the reset link (arrives within 2 minutes)',
+        'Click the link and create a new password',
+        'Ensure your password is at least 8 characters with uppercase, lowercase, and numbers'
+      ],
+    },
+    {
+      heading: 'Video Tutorial',
+      content: '🎥 Watch this 2-minute video walkthrough: https://youtube.com/watch?v=password-reset-demo\n\nThis visual guide shows each step of the password reset process.',
+      type: 'text',
+    },
+    {
+      heading: 'Direct Reset Link',
+      content: '🔗 Reset your password now: https://app.auzmor.com/reset-password\n\nThis link will take you directly to the password reset page.',
+      type: 'text',
+    },
+    {
+      heading: '⚠️ Important',
+      content: 'The reset link expires in 1 hour. If expired, request a new one from the login page.',
+      type: 'warning',
+    },
+    {
+      heading: '💡 Pro Tip',
+      content: 'Use a password manager like 1Password or LastPass to securely store your new password.',
+      type: 'tip',
+    }
+  ],
+  relatedArticles: [
+    { id: 'KB-1821', title: 'Account Security Best Practices', relevance: 85 },
+    { id: 'KB-1903', title: 'Two-Factor Authentication Setup', relevance: 72 },
+    { id: 'KB-1756', title: 'Common Login Issues and Solutions', relevance: 68 }
+  ],
+  helpfulCount: 847,
+  notHelpfulCount: 23,
+};
+
+// Support Agent: Password Reset Escalation Path (for demo scenario)
+export const passwordResetEscalationDemo = {
+  ticketId: 'TICK-2847',
+  currentStage: 1,
+  stages: [
+    {
+      level: 'AI Self-Help Resources Sent',
+      assignee: 'AI Assistant',
+      status: 'completed' as const,
+      timestamp: '2 min ago',
+      duration: '1.5 min',
+      notes: 'Sent KB article KB-1847 with video tutorial and direct reset link. User confirmed they received resources but still experiencing issues.'
+    },
+    {
+      level: 'Jira Issue Created',
+      assignee: 'Jira Automation System',
+      status: 'current' as const,
+      timestamp: 'Just now',
+      notes: 'Created JIRA-5621: "Password reset failed for user@auzmor.com"\n\n✉️ Email notification sent to CS team\n📱 SMS alert sent to on-call agent\n🔗 Jira link: https://auzmor.atlassian.net/browse/JIRA-5621'
+    },
+    {
+      level: 'Human Agent Assignment',
+      assignee: 'Sarah Chen (Senior Support Agent)',
+      status: 'pending' as const,
+      notes: 'Agent will investigate: account lockout status, email delivery logs, and system-wide password reset issues. Expected response time: 15 minutes.'
+    }
+  ],
+  recommendedAction: 'Agent should verify email delivery status and check for account lockout before attempting manual password reset. Consider checking if user email domain has spam filtering that may block reset emails.'
+};
+
 // Support Agent: Knowledge Article Widget Data
 export const knowledgeArticleDemo: KnowledgeArticleData = {
   id: 'KB-892',
@@ -2032,7 +2115,7 @@ export function getWidgetDemoData(widgetType: string): any {
     'meeting-scheduler': meetingSchedulerDemo,
     'knowledge-base-search': knowledgeBaseSearchDemo,
     'knowledge-article': knowledgeArticleDemo,
-    'escalation-path': ticketListDemo, // Reuse ticket list for now
+    'escalation-path': passwordResetEscalationDemo, // Updated for password reset demo
     'meeting-confirmation': meetingSchedulerDemo, // Reuse meeting scheduler for now
   };
 

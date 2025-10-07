@@ -25,6 +25,8 @@ import {
   knowledgeBaseSearchDemo,
   knowledgeArticleDemo,
   messageComposerDemo,
+  passwordResetArticleDemo,
+  passwordResetEscalationDemo,
 } from '@/data/demo-widget-data';
 
 export interface QueryMatch {
@@ -299,6 +301,37 @@ function detectManagerQuery(q: string): QueryMatch | null {
 // ============================================================================
 
 function detectAgentQuery(q: string): QueryMatch | null {
+  // PASSWORD RESET DEMO FLOW - Priority detection
+  // Step 1: Initial password reset request
+  if (
+    (q.includes('password') && (q.includes('reset') || q.includes('lock'))) ||
+    q.includes('i need to password reset') ||
+    q.includes('need password reset') ||
+    q.includes('locked out')
+  ) {
+    return {
+      widgetType: 'knowledge-article',
+      widgetData: passwordResetArticleDemo,
+      responseText: "I can help you with password reset! Let me show you our step-by-step guide with video tutorial and direct reset link. This should resolve your issue quickly.",
+    };
+  }
+
+  // Step 2: Escalation when user still unable to reset
+  if (
+    q.includes('still unable') ||
+    q.includes('still can\'t') ||
+    q.includes('not working') ||
+    q.includes('didn\'t work') ||
+    q.includes('still having trouble') ||
+    (q.includes('need') && q.includes('help'))
+  ) {
+    return {
+      widgetType: 'escalation-path',
+      widgetData: passwordResetEscalationDemo,
+      responseText: "I understand you need additional assistance. Let me escalate this to a human agent right away. I've created a Jira issue and notified our CS team via email and SMS. Sarah Chen will reach out within 15 minutes to help resolve this.",
+    };
+  }
+
   // Button Actions (Response Composer)
   if (q.includes('send the response') || q.includes('send response')) {
     return {

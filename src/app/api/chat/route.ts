@@ -100,6 +100,46 @@ const tools: Anthropic.Tool[] = [
       required: ['recipient', 'message'],
     },
   },
+  {
+    name: 'send_password_reset_resources',
+    description: 'Send KB article, video tutorial, and password reset link to user for self-help resolution.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address for password reset',
+        },
+        ticket_id: {
+          type: 'string',
+          description: 'Associated support ticket ID',
+        },
+      },
+      required: ['email'],
+    },
+  },
+  {
+    name: 'escalate_to_jira',
+    description: 'Create Jira issue for human agent assignment and notify CS team via email + SMS.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        ticket_id: {
+          type: 'string',
+          description: 'Ticket ID to escalate',
+        },
+        reason: {
+          type: 'string',
+          description: 'Reason for escalation (e.g., "User unable to reset password after AI self-help")',
+        },
+        user_email: {
+          type: 'string',
+          description: 'User email address',
+        },
+      },
+      required: ['ticket_id', 'reason'],
+    },
+  },
 ];
 
 // Mock tool execution for demo purposes
@@ -159,6 +199,36 @@ function executeTool(toolName: string, toolInput: Record<string, unknown>) {
         success: true,
         channel: toolInput.recipient,
         message_sent: true,
+        timestamp: new Date().toISOString(),
+      };
+
+    case 'send_password_reset_resources':
+      return {
+        success: true,
+        resources_sent: true,
+        email: toolInput.email,
+        ticket_id: toolInput.ticket_id || 'TICK-2847',
+        kb_article: 'KB-1847: How to Reset Your Password',
+        video_url: 'https://youtube.com/watch?v=password-reset-demo',
+        reset_link: 'https://app.auzmor.com/reset-password',
+        timestamp: new Date().toISOString(),
+      };
+
+    case 'escalate_to_jira':
+      return {
+        success: true,
+        jira_issue_created: true,
+        jira_issue_key: 'JIRA-5621',
+        jira_url: 'https://auzmor.atlassian.net/browse/JIRA-5621',
+        assigned_to: 'Sarah Chen (Senior Support Agent)',
+        notifications_sent: {
+          email: true,
+          sms: true,
+          email_recipients: ['cs-team@auzmor.com', 's.chen@auzmor.com'],
+          sms_recipients: ['+1-555-0123'],
+        },
+        ticket_status: 'Escalated',
+        expected_response_time: '15 minutes',
         timestamp: new Date().toISOString(),
       };
 

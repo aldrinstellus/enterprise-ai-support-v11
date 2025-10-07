@@ -21,7 +21,8 @@ export type WidgetType =
   | 'agent-performance-stats'
   | 'knowledge-base-search'
   | 'customer-risk-list'
-  | 'knowledge-article';
+  | 'knowledge-article'
+  | 'escalation-path';
 
 // ============================================================================
 // WIDGET DATA INTERFACES (Based on Bhanu's Demo Data)
