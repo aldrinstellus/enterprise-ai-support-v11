@@ -37,47 +37,8 @@ export function Sidebar({
   const firstUserMessage = currentMessages.find(msg => msg.type === 'user');
   const conversationPreview = firstUserMessage?.content?.substring(0, 50) || null;
 
-  const quickActions = [
-    {
-      id: 'sla',
-      icon: Target,
-      label: 'SLA Performance',
-      value: '92%',
-      query: 'Show me SLA performance breakdown',
-    },
-    {
-      id: 'churn',
-      icon: AlertTriangle,
-      label: 'Churn Risk',
-      badge: '5',
-      badgeColor: 'bg-destructive text-destructive-foreground',
-      query: 'Show me customer churn risk analysis',
-    },
-    {
-      id: 'executive',
-      icon: BarChart3,
-      label: 'Executive Summary',
-      badge: '94',
-      badgeColor: 'bg-primary text-primary-foreground',
-      query: 'Give me the executive summary',
-    },
-    {
-      id: 'board',
-      icon: TrendingUp,
-      label: 'Board Metrics',
-      badge: 'Ready',
-      badgeColor: 'bg-chart-2 text-white',
-      query: 'Show me board-level metrics',
-    },
-    {
-      id: 'accounts',
-      icon: Users,
-      label: 'High-Value Accounts',
-      badge: '18',
-      badgeColor: 'bg-chart-2 text-white',
-      query: 'Show me high-value account status',
-    },
-  ];
+  // Get persona-specific Quick Actions
+  const quickActions = currentPersona.quickActions || [];
 
   return (
     <aside
@@ -164,23 +125,18 @@ export function Sidebar({
             return (
               <button
                 key={action.id}
-                onClick={() => onQuickAction?.(action.query)}
+                onClick={() => action.query && onQuickAction?.(action.query)}
                 className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group"
               >
-                <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
-                  <span className="text-sm text-foreground">{action.label}</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
+                  <span className="text-sm text-foreground truncate">{action.label}</span>
                 </div>
-                {action.value && (
-                  <span className="text-sm font-medium text-foreground">{action.value}</span>
-                )}
-                {action.badge && (
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${action.badgeColor}`}
-                  >
-                    {action.badge}
-                  </span>
-                )}
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${action.badgeColor}`}
+                >
+                  {action.badge}
+                </span>
               </button>
             );
           })}
