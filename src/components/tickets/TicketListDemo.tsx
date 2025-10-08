@@ -180,9 +180,9 @@ export function TicketListDemo({
       </div>
 
       {/* Tickets Table */}
-      <div className="rounded-lg border border-border bg-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
+      <div className="rounded-lg border border-border bg-card">
+        <div className="overflow-x-auto overflow-y-visible">
+          <table className="w-full min-w-[1200px]">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">

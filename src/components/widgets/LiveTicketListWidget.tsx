@@ -14,7 +14,7 @@ export function LiveTicketListWidget() {
   };
 
   return (
-    <div className="my-4">
+    <div className="my-4 overflow-x-auto">
       <TicketListDemo
         limit={20}
         autoRefresh={false}

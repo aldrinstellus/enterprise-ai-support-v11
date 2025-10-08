@@ -314,9 +314,9 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
       {/* Messages Container */}
       <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-6 py-6 pb-40">
-        <div className="max-w-3xl mx-auto pb-8">
+        <div className="pb-8">
           {messages.length === 0 && !isThinking && !isComposing && (
-            <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center">
+            <div className="flex flex-col items-center justify-center h-full min-h-[60vh] text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-medium text-foreground mb-3">
                 AI that <span className="italic">actually</span> gets work done
               </h1>
@@ -329,7 +329,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
           {/* Messages */}
           <div className="space-y-6">
             {messages.map((message) => (
-              <div key={message.id}>
+              <div key={message.id} className={message.type !== 'widget' ? 'max-w-3xl mx-auto' : ''}>
                 {message.type === 'user' && (
                   <div className="flex gap-3 justify-end" data-message-role="user">
                     <div className="max-w-2xl">
@@ -450,9 +450,9 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
                 )}
 
                 {message.type === 'widget' && (
-                  <div className="flex gap-3">
-                    <div className="w-8 h-8 flex-shrink-0" />
-                    <div className="max-w-4xl w-full">
+                  <div className="flex gap-3 -mx-6">
+                    <div className="w-8 h-8 flex-shrink-0 ml-6" />
+                    <div className="flex-1 pr-6">
                       <WidgetRenderer
                         type={message.widgetType!}
                         data={message.widgetData}
