@@ -499,16 +499,18 @@ function detectAgentQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 5. Ticket List (agent's own tickets)
+  // 5. Ticket List (agent's own tickets or live Zoho tickets)
   if (
     q.includes('my tickets') ||
     q.includes('tickets that need attention') ||
-    (q.includes('show me') && q.includes('other tickets'))
+    (q.includes('show me') && q.includes('other tickets')) ||
+    (q.includes('current tickets') && q.includes('zoho')) ||
+    (q.includes('live tickets') && q.includes('dashboard'))
   ) {
     return {
       widgetType: 'ticket-list',
       widgetData: ticketListDemo,
-      responseText: "Here are your current tickets:",
+      responseText: "Here are the live tickets from Zoho Desk:",
     };
   }
 

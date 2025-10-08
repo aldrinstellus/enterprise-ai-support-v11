@@ -63,8 +63,7 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
       type: 'ticket-list',
       title: 'Live Tickets Dashboard',
       description: 'View real-time Zoho Desk tickets',
-      query: 'Show me the live tickets dashboard',
-      link: '/demo/tickets',
+      query: 'Show me all my current tickets from Zoho Desk',
     },
     {
       id: 'team-workload',

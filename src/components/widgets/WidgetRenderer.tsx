@@ -5,6 +5,7 @@ import { PerformanceTrendsWidget } from './PerformanceTrendsWidget';
 import { SentimentAnalysisWidget } from './SentimentAnalysisWidget';
 import { CustomerRiskProfileWidget } from './CustomerRiskProfileWidget';
 import { TicketListWidget } from './TicketListWidget';
+import { LiveTicketListWidget } from './LiveTicketListWidget';
 import { AgentDashboardWidget } from './AgentDashboardWidget';
 import { TeamWorkloadDashboardWidget } from './TeamWorkloadDashboardWidget';
 import { MeetingSchedulerWidget } from './MeetingSchedulerWidget';
@@ -51,7 +52,7 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
         return <CustomerRiskProfileWidget data={data as any} />;
 
       case 'ticket-list':
-        return <TicketListWidget data={data as any} />;
+        return <LiveTicketListWidget />;
 
       case 'agent-dashboard':
         return <AgentDashboardWidget data={data as any} />;
