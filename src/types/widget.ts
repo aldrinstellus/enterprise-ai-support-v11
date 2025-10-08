@@ -22,7 +22,10 @@ export type WidgetType =
   | 'knowledge-base-search'
   | 'customer-risk-list'
   | 'knowledge-article'
-  | 'escalation-path';
+  | 'escalation-path'
+  | 'system-access-status'
+  | 'interactive-update'
+  | 'ticket-processing';
 
 // ============================================================================
 // WIDGET DATA INTERFACES (Based on Bhanu's Demo Data)
@@ -707,6 +710,125 @@ export interface MessageComposerData {
   };
 }
 
+// Escalation Path Widget (All personas - for AI → Human escalation)
+export interface EscalationPathData {
+  ticketId: string;
+  currentStage: number;
+  stages: Array<{
+    level: string;
+    assignee: string;
+    status: 'completed' | 'current' | 'pending';
+    timestamp?: string;
+    duration?: string;
+    notes?: string;
+  }>;
+  recommendedAction?: string;
+}
+
+// System Access Status Widget (Support Agent - multi-system access checks)
+export interface SystemAccessStatusData {
+  ticketId: string;
+  customer: string;
+  issueReported: string;
+  timestamp: string;
+  systemChecks: Array<{
+    systemName: string;
+    status: 'working' | 'degraded' | 'down' | 'fixed';
+    issue: string;
+    aiAction: string;
+    resolved: boolean;
+    details?: string;
+  }>;
+  overallResolution: 'fully-resolved' | 'partially-resolved' | 'escalation-needed';
+  automatedActions: string[];
+  manualActionsNeeded?: string[];
+  resolutionMessage: string;
+}
+
+// Interactive Update Widget (Support Agent - hybrid UI updates with AI automation)
+export interface InteractiveUpdateData {
+  ticketId: string;
+  customer: string;
+  updateType: 'profile' | 'course' | 'settings';
+  title: string;
+  issueReported: string;
+  currentData: Record<string, string>;
+  updateableFields: Array<{
+    field: string;
+    label: string;
+    currentValue: string;
+    canAutoUpdate: boolean;
+    requiresApproval?: string; // "manager" | "hr" | "admin"
+    icon?: string;
+  }>;
+  aiCapabilities: {
+    canUpdate: string[];
+    needsHuman: string[];
+    explanation: string;
+  };
+  updateResult?: {
+    success: boolean;
+    updatedFields: Array<{
+      field: string;
+      label: string;
+      oldValue: string;
+      newValue: string;
+    }>;
+    message: string;
+    timestamp: string;
+  };
+  resolution: 'ai-resolved' | 'human-assigned' | 'pending';
+  humanAgent?: {
+    name: string;
+    role: string;
+    eta: string;
+    reason: string;
+  };
+}
+
+// Ticket Processing Widget (Real-time Zoho ticket processing status)
+export interface TicketProcessingData {
+  ticketId: string;
+  ticketNumber: string;
+  customer: string;
+  subject: string;
+  status: 'extracting' | 'classifying' | 'searching' | 'generating' | 'replying' | 'escalating' | 'completed' | 'failed';
+  classification?: {
+    primary_category: string;
+    confidence: number;
+    auto_resolvable: boolean;
+    reasoning: string;
+  };
+  kbSearch?: {
+    query: string;
+    method: 'chat' | 'retrieval';
+    matches: number;
+  };
+  aiResponse?: {
+    text: string;
+    needsEscalation: boolean;
+    escalationSignals: string[];
+  };
+  jiraTicket?: {
+    key: string;
+    url: string;
+    summary: string;
+  };
+  timeline: Array<{
+    step: string;
+    status: 'pending' | 'in_progress' | 'completed' | 'failed';
+    timestamp: string;
+    duration?: number;
+  }>;
+  startTime: string;
+  endTime?: string;
+  totalDuration?: number;
+  error?: {
+    step: string;
+    message: string;
+  };
+}
+
 // Union type for all widget data
 export type WidgetData =
   | ExecutiveSummaryData
@@ -728,4 +850,8 @@ export type WidgetData =
   | AgentPerformanceStatsData
   | KnowledgeBaseSearchData
   | KnowledgeArticleData
-  | MessageComposerData;
+  | MessageComposerData
+  | EscalationPathData
+  | SystemAccessStatusData
+  | InteractiveUpdateData
+  | TicketProcessingData;

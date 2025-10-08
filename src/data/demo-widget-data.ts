@@ -1943,6 +1943,504 @@ export const passwordResetEscalationDemo = {
   recommendedAction: 'Agent should verify email delivery status and check for account lockout before attempting manual password reset. Consider checking if user email domain has spam filtering that may block reset emails.'
 };
 
+// Support Agent: Account Unlock Success (for demo scenario)
+export const accountUnlockSuccessDemo: ResponseComposerData = {
+  ticketId: 'TICK-2901',
+  subject: 'Account Unlock Request',
+  customer: 'John Doe',
+  priority: 'high' as const,
+  lastMessage: {
+    from: 'John Doe (john.doe@company.com)',
+    timestamp: '5 min ago',
+    content: 'I need you to unlock my account. I cannot access the system.'
+  },
+  suggestedTone: 'professional' as const,
+  aiGeneratedResponse: {
+    content: 'Good news, John! I\'ve completed the verification and successfully unlocked your account.\n\nAccount Details:\n• Email: john.doe@company.com\n• Status: ACTIVE (previously locked)\n• Lock Reason: Multiple failed login attempts (5 attempts in 10 minutes)\n• Lock Duration: 2 hours\n• Unlocked By: AI Assistant\n• Unlocked At: Just now\n\nYou can now log in immediately. Your account was automatically locked as a security measure after detecting 5 failed login attempts. This is a standard security protocol to protect your account from unauthorized access.\n\nFor your security, I recommend:\n1. Clear your browser cache and cookies\n2. Use the "Forgot Password" link if you\'re unsure of your password\n3. Enable Two-Factor Authentication for additional security\n\nYour account is now fully accessible. Please try logging in and let me know if you experience any issues.',
+    keyPoints: [
+      'Account successfully unlocked and verified',
+      'Lock was triggered by 5 failed login attempts (security protocol)',
+      'No security threats detected - safe to proceed',
+      'Two-factor authentication recommended for enhanced security'
+    ],
+    nextSteps: [
+      'Clear browser cache and cookies',
+      'Log in using your current credentials',
+      'Set up Two-Factor Authentication (recommended)',
+      'Contact us if you continue experiencing login issues'
+    ],
+    estimatedSentiment: 'positive' as const
+  },
+  knowledgeBaseArticles: [
+    {
+      id: 'KB-1903',
+      title: 'Setting Up Two-Factor Authentication',
+      relevance: 92,
+      excerpt: 'Learn how to enable two-factor authentication (2FA) for enhanced account security...'
+    },
+    {
+      id: 'KB-1821',
+      title: 'Account Security Best Practices',
+      relevance: 88,
+      excerpt: 'Follow these security best practices to keep your account safe and secure...'
+    }
+  ],
+  templateOptions: [
+    {
+      name: 'Standard Unlock Confirmation',
+      description: 'Standard template for successful account unlock',
+      preview: 'Your account has been successfully unlocked...'
+    }
+  ]
+};
+
+// Support Agent: Account Unlock Escalation - Security Issue (for demo scenario)
+export const accountUnlockEscalationDemo = {
+  ticketId: 'TICK-2902',
+  currentStage: 1,
+  stages: [
+    {
+      level: 'AI Account Verification',
+      assignee: 'AI Assistant',
+      status: 'completed' as const,
+      timestamp: '3 min ago',
+      duration: '1 min',
+      notes: 'Automated security scan completed. Account: jane.smith@company.com\n\n✓ Account exists and is active\n✓ User identity verified via support ticket\n⚠️ Security flags detected requiring human review'
+    },
+    {
+      level: 'Security Flags Detected',
+      assignee: 'Security Automation System',
+      status: 'current' as const,
+      timestamp: '2 min ago',
+      notes: '🚨 Multiple security concerns identified:\n\n1. Suspicious Login Location\n   • Last successful login: San Francisco, CA\n   • Failed attempts from: Moscow, Russia (5 attempts)\n   • Geographic anomaly: 5,000+ miles\n\n2. Unrecognized Device\n   • Device fingerprint: Unknown\n   • Browser: Chrome 118 (Linux)\n   • Never seen before on this account\n\n3. Password Spray Attack Pattern\n   • Multiple accounts targeted simultaneously\n   • Same IP address attempting various passwords\n\n⚠️ AI Decision: Cannot auto-unlock due to security risk\n✅ Escalating to Security Team for manual review'
+    },
+    {
+      level: 'Security Team Review',
+      assignee: 'Mike Johnson (Security Analyst)',
+      status: 'pending' as const,
+      notes: 'Security analyst will:\n• Verify account owner identity via secondary authentication\n• Review complete login history and patterns\n• Investigate potential account compromise\n• Coordinate with user to secure account\n• Implement additional security measures if needed\n\nExpected response time: 30 minutes\nPriority: HIGH - Potential security breach'
+    }
+  ],
+  recommendedAction: 'Security analyst should contact user via verified phone number to confirm identity before unlocking. Recommend mandatory password reset and 2FA setup after unlock. Monitor account for 48 hours post-unlock.'
+};
+
+// Support Agent: Multi-System Access - Fully Resolved (for demo scenario)
+export const multiSystemAccessResolvedDemo = {
+  ticketId: 'TICK-2903',
+  customer: 'Sarah Martinez',
+  issueReported: "I can't access SharePoint, Slack via email or chat",
+  timestamp: '2 min ago',
+  systemChecks: [
+    {
+      systemName: 'SharePoint',
+      status: 'fixed' as const,
+      issue: 'User not in "Marketing Team" group',
+      aiAction: 'Added user to "Marketing Team" SharePoint group',
+      resolved: true,
+      details: 'Access level: Contributor | Applied in 5 seconds | User can now view and edit documents'
+    },
+    {
+      systemName: 'Slack',
+      status: 'fixed' as const,
+      issue: 'Account deactivated (30 days idle)',
+      aiAction: 'Reactivated Slack account and restored workspace access',
+      resolved: true,
+      details: 'All channels restored | Previous messages preserved | Notifications re-enabled'
+    },
+    {
+      systemName: 'Email',
+      status: 'fixed' as const,
+      issue: 'Mailbox quota exceeded (100% full - 50GB/50GB)',
+      aiAction: 'Archived emails older than 90 days to archive mailbox',
+      resolved: true,
+      details: '15GB freed | Current usage: 35GB/50GB (70%) | Archive accessible via Outlook'
+    }
+  ],
+  overallResolution: 'fully-resolved' as const,
+  automatedActions: [
+    'Added Sarah Martinez to SharePoint "Marketing Team" group with Contributor permissions',
+    'Reactivated Slack account (@sarah.martinez) and restored access to 12 channels',
+    'Archived 3,847 emails (older than 90 days) freeing 15GB of mailbox space',
+    'Sent verification email to sarah.martinez@company.com confirming all systems restored',
+    'Created audit log entry for compliance tracking'
+  ],
+  resolutionMessage: 'All systems are now accessible. No manual intervention required. The user can immediately access SharePoint, Slack, and Email with full functionality restored. Automated fixes have been logged for compliance.'
+};
+
+// Support Agent: Multi-System Access - Partial Resolution (for demo scenario)
+export const multiSystemAccessPartialDemo = {
+  ticketId: 'TICK-2904',
+  customer: 'Michael Chen',
+  issueReported: "Can't access SharePoint, Slack, or my email",
+  timestamp: '5 min ago',
+  systemChecks: [
+    {
+      systemName: 'SharePoint',
+      status: 'fixed' as const,
+      issue: 'License expired (Office 365 E3)',
+      aiAction: 'Reassigned available license from license pool',
+      resolved: true,
+      details: 'License type: Office 365 E3 | Activated in 10 seconds | All SharePoint sites accessible'
+    },
+    {
+      systemName: 'Slack',
+      status: 'fixed' as const,
+      issue: 'SSO authentication token expired',
+      aiAction: 'Refreshed SSO token and cleared authentication cache',
+      resolved: true,
+      details: 'New token valid for 7 days | User can log in via SSO portal'
+    },
+    {
+      systemName: 'Email',
+      status: 'down' as const,
+      issue: 'Exchange server outage affecting 200+ users',
+      aiAction: 'Cannot auto-resolve - Server-level issue detected',
+      resolved: false,
+      details: '⚠️ Escalated to IT Operations | Incident INC-8821 created | ETA: 30 minutes'
+    }
+  ],
+  overallResolution: 'partially-resolved' as const,
+  automatedActions: [
+    'Reassigned Office 365 E3 license to Michael Chen (ID: mchen@company.com)',
+    'Refreshed SSO authentication token for Slack workspace',
+    'Created Jira incident INC-8821 for Exchange server outage',
+    'Notified IT Operations team via email and SMS'
+  ],
+  manualActionsNeeded: [
+    'IT Operations team investigating Exchange server outage (INC-8821)',
+    'Estimated resolution time: 30 minutes',
+    'User will receive email notification when email service is restored'
+  ],
+  resolutionMessage: 'SharePoint and Slack access have been restored automatically. Email access is currently unavailable due to a server-level outage affecting multiple users. IT Operations has been notified and is working on resolution (ETA: 30 minutes).'
+};
+
+// Support Agent: Profile Update - AI Success (for demo scenario)
+export const profileUpdateSuccessDemo = {
+  ticketId: 'TICK-2905',
+  customer: 'John Doe',
+  updateType: 'profile' as const,
+  title: 'Profile Update Request',
+  issueReported: 'How do I update my profile?',
+  currentData: {
+    name: 'John Doe',
+    email: 'john.doe@company.com',
+    phone: '+1-555-0123',
+    location: 'San Francisco, CA',
+    department: 'Marketing',
+    title: 'Marketing Manager'
+  },
+  updateableFields: [
+    {
+      field: 'name',
+      label: 'Full Name',
+      currentValue: 'John Doe',
+      canAutoUpdate: true
+    },
+    {
+      field: 'phone',
+      label: 'Phone Number',
+      currentValue: '+1-555-0123',
+      canAutoUpdate: true
+    },
+    {
+      field: 'location',
+      label: 'Office Location',
+      currentValue: 'San Francisco, CA',
+      canAutoUpdate: true
+    },
+    {
+      field: 'email',
+      label: 'Email Address',
+      currentValue: 'john.doe@company.com',
+      canAutoUpdate: true,
+      icon: 'mail'
+    },
+    {
+      field: 'department',
+      label: 'Department',
+      currentValue: 'Marketing',
+      canAutoUpdate: false,
+      requiresApproval: 'manager'
+    },
+    {
+      field: 'title',
+      label: 'Job Title',
+      currentValue: 'Marketing Manager',
+      canAutoUpdate: false,
+      requiresApproval: 'hr'
+    }
+  ],
+  aiCapabilities: {
+    canUpdate: [
+      'Full name (instant update)',
+      'Phone number (instant update)',
+      'Office location (instant update)',
+      'Email address (with verification email sent)'
+    ],
+    needsHuman: [
+      'Department changes (requires manager approval)',
+      'Job title changes (requires HR approval)',
+      'Salary/compensation (requires HR and Finance approval)'
+    ],
+    explanation: 'I can instantly update your basic profile information like name, phone, and location. For organizational changes like department or job title, I\'ll route your request to the appropriate approver (manager or HR) who can process it within 1 business day.'
+  },
+  updateResult: {
+    success: true,
+    updatedFields: [
+      {
+        field: 'phone',
+        label: 'Phone Number',
+        oldValue: '+1-555-0123',
+        newValue: '+1-555-9999'
+      },
+      {
+        field: 'location',
+        label: 'Office Location',
+        oldValue: 'San Francisco, CA',
+        newValue: 'New York, NY'
+      }
+    ],
+    message: 'Profile updated successfully! Changes are live and synced across all systems.',
+    timestamp: 'Just now'
+  },
+  resolution: 'ai-resolved' as const
+};
+
+// Support Agent: Profile Update - Human Escalation (for demo scenario)
+export const profileUpdateEscalationDemo = {
+  ticketId: 'TICK-2906',
+  customer: 'Jane Smith',
+  updateType: 'profile' as const,
+  title: 'Department Change Request',
+  issueReported: 'How do I update my profile to change departments?',
+  currentData: {
+    name: 'Jane Smith',
+    email: 'jane.smith@company.com',
+    phone: '+1-555-0456',
+    location: 'Boston, MA',
+    department: 'Engineering',
+    title: 'Senior Software Engineer'
+  },
+  updateableFields: [
+    {
+      field: 'name',
+      label: 'Full Name',
+      currentValue: 'Jane Smith',
+      canAutoUpdate: true
+    },
+    {
+      field: 'phone',
+      label: 'Phone Number',
+      currentValue: '+1-555-0456',
+      canAutoUpdate: true
+    },
+    {
+      field: 'location',
+      label: 'Office Location',
+      currentValue: 'Boston, MA',
+      canAutoUpdate: true
+    },
+    {
+      field: 'email',
+      label: 'Email Address',
+      currentValue: 'jane.smith@company.com',
+      canAutoUpdate: true
+    },
+    {
+      field: 'department',
+      label: 'Department',
+      currentValue: 'Engineering',
+      canAutoUpdate: false,
+      requiresApproval: 'manager'
+    },
+    {
+      field: 'title',
+      label: 'Job Title',
+      currentValue: 'Senior Software Engineer',
+      canAutoUpdate: false,
+      requiresApproval: 'hr'
+    }
+  ],
+  aiCapabilities: {
+    canUpdate: [
+      'Full name (instant update)',
+      'Phone number (instant update)',
+      'Office location (instant update)',
+      'Email address (with verification)'
+    ],
+    needsHuman: [
+      'Department changes (requires manager approval) - YOU SELECTED THIS',
+      'Job title changes (requires HR approval)',
+      'Reporting structure changes (requires C-level approval)'
+    ],
+    explanation: 'Department changes affect your reporting structure, team assignments, and system access permissions. I\'ve created a request for your manager to review and approve this change. They can approve it with a single click, and the change will take effect immediately after approval.'
+  },
+  resolution: 'human-assigned' as const,
+  humanAgent: {
+    name: 'Michael Chen',
+    role: 'Engineering Manager',
+    eta: '15 minutes',
+    reason: 'Department change from Engineering to Product requires manager approval to ensure proper team transitions and access control updates.'
+  }
+};
+
+// Support Agent: Course Update - AI Success (for demo scenario)
+export const courseUpdateSuccessDemo = {
+  ticketId: 'TICK-2907',
+  customer: 'Dr. Sarah Williams',
+  updateType: 'course' as const,
+  title: 'Course Information Update',
+  issueReported: 'How do I update a course?',
+  currentData: {
+    courseCode: 'CS-101',
+    courseName: 'Introduction to Programming',
+    instructor: 'Dr. Sarah Williams',
+    schedule: 'Mon/Wed/Fri 10:00 AM - 11:30 AM',
+    classroom: 'Tech Building Room 205',
+    maxStudents: '30',
+    semester: 'Fall 2025'
+  },
+  updateableFields: [
+    {
+      field: 'courseName',
+      label: 'Course Name',
+      currentValue: 'Introduction to Programming',
+      canAutoUpdate: true
+    },
+    {
+      field: 'schedule',
+      label: 'Schedule',
+      currentValue: 'Mon/Wed/Fri 10:00 AM - 11:30 AM',
+      canAutoUpdate: true
+    },
+    {
+      field: 'classroom',
+      label: 'Classroom',
+      currentValue: 'Tech Building Room 205',
+      canAutoUpdate: true
+    },
+    {
+      field: 'maxStudents',
+      label: 'Max Students',
+      currentValue: '30',
+      canAutoUpdate: true
+    },
+    {
+      field: 'instructor',
+      label: 'Instructor',
+      currentValue: 'Dr. Sarah Williams',
+      canAutoUpdate: false,
+      requiresApproval: 'admin'
+    }
+  ],
+  aiCapabilities: {
+    canUpdate: [
+      'Course name and description',
+      'Schedule (with conflict checking)',
+      'Classroom assignment (with availability check)',
+      'Max students capacity'
+    ],
+    needsHuman: [
+      'Instructor changes (requires department chair approval)',
+      'Course code changes (requires registrar approval)',
+      'Credit hours (requires academic affairs approval)'
+    ],
+    explanation: 'I can update course details like name, schedule, and classroom automatically. The system will check for scheduling conflicts and classroom availability. Instructor changes require department chair approval to ensure proper faculty assignment and workload management.'
+  },
+  updateResult: {
+    success: true,
+    updatedFields: [
+      {
+        field: 'courseName',
+        label: 'Course Name',
+        oldValue: 'Introduction to Programming',
+        newValue: 'Programming Fundamentals'
+      },
+      {
+        field: 'classroom',
+        label: 'Classroom',
+        oldValue: 'Tech Building Room 205',
+        newValue: 'Science Hall Room 310'
+      }
+    ],
+    message: 'Course updated successfully! All enrolled students have been notified of the changes via email.',
+    timestamp: '2 minutes ago'
+  },
+  resolution: 'ai-resolved' as const
+};
+
+// Support Agent: Course Update - Human Escalation (for demo scenario)
+export const courseUpdateEscalationDemo = {
+  ticketId: 'TICK-2908',
+  customer: 'Dr. Robert Johnson',
+  updateType: 'course' as const,
+  title: 'Instructor Change Request',
+  issueReported: 'How do I update the course instructor?',
+  currentData: {
+    courseCode: 'MATH-201',
+    courseName: 'Calculus II',
+    instructor: 'Dr. Robert Johnson',
+    schedule: 'Tue/Thu 2:00 PM - 3:30 PM',
+    classroom: 'Math Building Room 101',
+    maxStudents: '40',
+    semester: 'Fall 2025'
+  },
+  updateableFields: [
+    {
+      field: 'courseName',
+      label: 'Course Name',
+      currentValue: 'Calculus II',
+      canAutoUpdate: true
+    },
+    {
+      field: 'schedule',
+      label: 'Schedule',
+      currentValue: 'Tue/Thu 2:00 PM - 3:30 PM',
+      canAutoUpdate: true
+    },
+    {
+      field: 'classroom',
+      label: 'Classroom',
+      currentValue: 'Math Building Room 101',
+      canAutoUpdate: true
+    },
+    {
+      field: 'maxStudents',
+      label: 'Max Students',
+      currentValue: '40',
+      canAutoUpdate: true
+    },
+    {
+      field: 'instructor',
+      label: 'Instructor',
+      currentValue: 'Dr. Robert Johnson',
+      canAutoUpdate: false,
+      requiresApproval: 'admin'
+    }
+  ],
+  aiCapabilities: {
+    canUpdate: [
+      'Course name and description',
+      'Schedule (with conflict checking)',
+      'Classroom assignment',
+      'Max students capacity'
+    ],
+    needsHuman: [
+      'Instructor changes (requires department chair approval) - YOU REQUESTED THIS',
+      'Course prerequisites (requires curriculum committee)',
+      'Grading scale changes (requires academic affairs)'
+    ],
+    explanation: 'Instructor assignments affect faculty workload, accreditation records, and student expectations. I\'ve created a request for the department chair to review this change. They\'ll verify the new instructor\'s qualifications and availability before approving the reassignment.'
+  },
+  resolution: 'human-assigned' as const,
+  humanAgent: {
+    name: 'Prof. Lisa Anderson',
+    role: 'Mathematics Department Chair',
+    eta: '1 hour',
+    reason: 'Instructor changes require department chair approval to ensure faculty qualifications, workload balance, and continuity for enrolled students.'
+  }
+};
+
 // Support Agent: Knowledge Article Widget Data
 export const knowledgeArticleDemo: KnowledgeArticleData = {
   id: 'KB-892',

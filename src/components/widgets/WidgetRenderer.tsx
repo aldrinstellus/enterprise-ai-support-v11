@@ -21,6 +21,9 @@ import { KnowledgeBaseSearchWidget } from './KnowledgeBaseSearchWidget';
 import { KnowledgeArticleWidget } from './KnowledgeArticleWidget';
 import { MessageComposerWidget } from './MessageComposerWidget';
 import { EscalationPathWidget } from './EscalationPathWidget';
+import { SystemAccessStatusWidget } from './SystemAccessStatusWidget';
+import { InteractiveUpdateWidget } from './InteractiveUpdateWidget';
+import { TicketProcessingWidget } from './TicketProcessingWidget';
 
 interface WidgetRendererProps {
   type: WidgetType;
@@ -97,6 +100,15 @@ export function WidgetRenderer({ type, data, onAction }: WidgetRendererProps) {
 
       case 'escalation-path':
         return <EscalationPathWidget data={data as any} />;
+
+      case 'system-access-status':
+        return <SystemAccessStatusWidget data={data as any} />;
+
+      case 'interactive-update':
+        return <InteractiveUpdateWidget data={data as any} />;
+
+      case 'ticket-processing':
+        return <TicketProcessingWidget data={data as any} />;
 
       default:
         // Fallback for unimplemented widgets

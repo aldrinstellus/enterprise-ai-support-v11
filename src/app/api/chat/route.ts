@@ -140,6 +140,199 @@ const tools: Anthropic.Tool[] = [
       required: ['ticket_id', 'reason'],
     },
   },
+  {
+    name: 'verify_account_status',
+    description: 'Verify user account status and check for security flags or lock reasons.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address to verify',
+        },
+        user_id: {
+          type: 'string',
+          description: 'User ID (optional)',
+        },
+      },
+      required: ['email'],
+    },
+  },
+  {
+    name: 'unlock_account_automatically',
+    description: 'Automatically unlock user account after verification. Only use if no severe security flags detected.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        ticket_id: {
+          type: 'string',
+          description: 'Associated support ticket ID',
+        },
+        reason: {
+          type: 'string',
+          description: 'Reason account was locked (e.g., "5 failed login attempts")',
+        },
+      },
+      required: ['email', 'ticket_id'],
+    },
+  },
+  {
+    name: 'check_multi_system_access',
+    description: 'Check user access to multiple systems (SharePoint, Slack, Email, etc.) and identify any issues.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        systems: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'List of systems to check (e.g., ["sharepoint", "slack", "email"])',
+        },
+      },
+      required: ['email', 'systems'],
+    },
+  },
+  {
+    name: 'fix_sharepoint_access',
+    description: 'Automatically fix SharePoint access issues (add to group, assign license, reset permissions).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        issue_type: {
+          type: 'string',
+          description: 'Type of issue (permission, license, group)',
+        },
+      },
+      required: ['email'],
+    },
+  },
+  {
+    name: 'get_user_profile',
+    description: 'Get current user profile information including name, email, phone, location, department, and title.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        user_id: {
+          type: 'string',
+          description: 'User ID (optional)',
+        },
+      },
+      required: ['email'],
+    },
+  },
+  {
+    name: 'update_user_profile',
+    description: 'Update user profile information. Can automatically update basic fields (name, phone, location) but requires approval for sensitive fields (department, title).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        updates: {
+          type: 'object',
+          description: 'Fields to update (e.g., {"phone": "+1-555-9999", "location": "New York, NY"})',
+        },
+        ticket_id: {
+          type: 'string',
+          description: 'Associated support ticket ID',
+        },
+      },
+      required: ['email', 'updates', 'ticket_id'],
+    },
+  },
+  {
+    name: 'get_course_details',
+    description: 'Get current course information including name, description, schedule, instructor, and classroom.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        course_id: {
+          type: 'string',
+          description: 'Course ID',
+        },
+        course_name: {
+          type: 'string',
+          description: 'Course name (if ID not available)',
+        },
+      },
+      required: [],
+    },
+  },
+  {
+    name: 'update_course_details',
+    description: 'Update course information. Can automatically update basic fields (name, description, schedule, classroom) but requires department chair approval for instructor changes.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        course_id: {
+          type: 'string',
+          description: 'Course ID',
+        },
+        updates: {
+          type: 'object',
+          description: 'Fields to update (e.g., {"name": "Advanced JavaScript", "classroom": "Building A, Room 305"})',
+        },
+        ticket_id: {
+          type: 'string',
+          description: 'Associated support ticket ID',
+        },
+      },
+      required: ['course_id', 'updates', 'ticket_id'],
+    },
+  },
+  {
+    name: 'fix_slack_access',
+    description: 'Automatically fix Slack access issues (reactivate account, refresh SSO token, add to channels).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        issue_type: {
+          type: 'string',
+          description: 'Type of issue (deactivated, sso, permissions)',
+        },
+      },
+      required: ['email'],
+    },
+  },
+  {
+    name: 'fix_email_access',
+    description: 'Automatically fix email access issues (expand quota, archive old emails, fix mailbox corruption).',
+    input_schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          description: 'User email address',
+        },
+        issue_type: {
+          type: 'string',
+          description: 'Type of issue (quota, corruption, permissions)',
+        },
+      },
+      required: ['email'],
+    },
+  },
 ];
 
 // Mock tool execution for demo purposes
@@ -229,6 +422,214 @@ function executeTool(toolName: string, toolInput: Record<string, unknown>) {
         },
         ticket_status: 'Escalated',
         expected_response_time: '15 minutes',
+        timestamp: new Date().toISOString(),
+      };
+
+    case 'verify_account_status':
+      return {
+        success: true,
+        email: toolInput.email,
+        account_status: 'locked',
+        lock_reason: '5 failed login attempts',
+        locked_at: '2025-10-07T09:23:14Z',
+        security_flags: [],
+        can_auto_unlock: true,
+        verification_passed: true,
+      };
+
+    case 'unlock_account_automatically':
+      return {
+        success: true,
+        account_unlocked: true,
+        email: toolInput.email,
+        ticket_id: toolInput.ticket_id,
+        unlocked_at: new Date().toISOString(),
+        lock_reason: toolInput.reason || '5 failed login attempts',
+        next_steps: [
+          'Clear browser cache and cookies',
+          'Log in using current credentials',
+          'Enable two-factor authentication (recommended)',
+        ],
+      };
+
+    case 'check_multi_system_access':
+      return {
+        success: true,
+        email: toolInput.email,
+        systems_checked: toolInput.systems,
+        results: [
+          {
+            system: 'SharePoint',
+            status: 'issue_detected',
+            issue: 'User not in Marketing Team group',
+            can_auto_fix: true,
+          },
+          {
+            system: 'Slack',
+            status: 'issue_detected',
+            issue: 'Account deactivated (30 days idle)',
+            can_auto_fix: true,
+          },
+          {
+            system: 'Email',
+            status: 'issue_detected',
+            issue: 'Mailbox quota exceeded (100% full)',
+            can_auto_fix: true,
+          },
+        ],
+      };
+
+    case 'fix_sharepoint_access':
+      return {
+        success: true,
+        system: 'SharePoint',
+        fixed: true,
+        email: toolInput.email,
+        action_taken: 'Added user to Marketing Team group with Contributor permissions',
+        details: {
+          group: 'Marketing Team',
+          permission_level: 'Contributor',
+          applied_in: '5 seconds',
+        },
+      };
+
+    case 'fix_slack_access':
+      return {
+        success: true,
+        system: 'Slack',
+        fixed: true,
+        email: toolInput.email,
+        action_taken: 'Reactivated Slack account and restored workspace access',
+        details: {
+          workspace: 'Company Workspace',
+          channels_restored: 12,
+          messages_preserved: true,
+        },
+      };
+
+    case 'fix_email_access':
+      return {
+        success: true,
+        system: 'Email',
+        fixed: true,
+        email: toolInput.email,
+        action_taken: 'Archived emails older than 90 days to archive mailbox',
+        details: {
+          emails_archived: 3847,
+          space_freed: '15GB',
+          new_usage: '35GB/50GB (70%)',
+        },
+      };
+
+    case 'get_user_profile':
+      return {
+        success: true,
+        email: toolInput.email,
+        profile: {
+          name: 'John Doe',
+          email: 'john.doe@company.com',
+          phone: '+1-555-0123',
+          location: 'San Francisco, CA',
+          department: 'Marketing',
+          title: 'Marketing Manager',
+          manager: 'Jane Smith',
+          employee_id: 'EMP-10291',
+          hire_date: '2018-03-15',
+        },
+      };
+
+    case 'update_user_profile':
+      const updates = toolInput.updates as Record<string, string>;
+      const sensitiveFields = ['department', 'title', 'manager'];
+      const requiresApproval = Object.keys(updates).some(field =>
+        sensitiveFields.includes(field)
+      );
+
+      if (requiresApproval) {
+        return {
+          success: false,
+          requires_approval: true,
+          email: toolInput.email,
+          ticket_id: toolInput.ticket_id,
+          requested_changes: updates,
+          approval_required_for: Object.keys(updates).filter(field =>
+            sensitiveFields.includes(field)
+          ),
+          assigned_to: {
+            name: 'Jane Smith',
+            role: 'Department Manager',
+            email: 'jane.smith@company.com',
+          },
+          message: 'These changes require manager approval due to organizational impact.',
+        };
+      }
+
+      return {
+        success: true,
+        email: toolInput.email,
+        ticket_id: toolInput.ticket_id,
+        updated_fields: Object.keys(updates).map(field => ({
+          field,
+          old_value: field === 'phone' ? '+1-555-0123' : field === 'location' ? 'San Francisco, CA' : 'Current Value',
+          new_value: updates[field],
+        })),
+        message: 'Profile updated successfully! Changes are live and synced across all systems.',
+        timestamp: new Date().toISOString(),
+      };
+
+    case 'get_course_details':
+      return {
+        success: true,
+        course_id: toolInput.course_id || 'CS-301',
+        course: {
+          name: 'Introduction to JavaScript',
+          description: 'Learn the fundamentals of JavaScript programming',
+          instructor: 'Dr. Emily Rodriguez',
+          schedule: 'Mon/Wed 2:00 PM - 3:30 PM',
+          classroom: 'Building B, Room 205',
+          semester: 'Fall 2025',
+          credits: 3,
+          enrollment: 28,
+          capacity: 30,
+        },
+      };
+
+    case 'update_course_details':
+      const courseUpdates = toolInput.updates as Record<string, string>;
+      const sensitiveFieldsCourse = ['instructor'];
+      const requiresApprovalCourse = Object.keys(courseUpdates).some(field =>
+        sensitiveFieldsCourse.includes(field)
+      );
+
+      if (requiresApprovalCourse) {
+        return {
+          success: false,
+          requires_approval: true,
+          course_id: toolInput.course_id,
+          ticket_id: toolInput.ticket_id,
+          requested_changes: courseUpdates,
+          approval_required_for: Object.keys(courseUpdates).filter(field =>
+            sensitiveFieldsCourse.includes(field)
+          ),
+          assigned_to: {
+            name: 'Dr. Michael Thompson',
+            role: 'Department Chair - Computer Science',
+            email: 'm.thompson@university.edu',
+          },
+          message: 'Instructor changes require department chair approval.',
+        };
+      }
+
+      return {
+        success: true,
+        course_id: toolInput.course_id,
+        ticket_id: toolInput.ticket_id,
+        updated_fields: Object.keys(courseUpdates).map(field => ({
+          field,
+          old_value: field === 'name' ? 'Introduction to JavaScript' : field === 'classroom' ? 'Building B, Room 205' : 'Current Value',
+          new_value: courseUpdates[field],
+        })),
+        message: 'Course updated successfully! Changes are visible to all enrolled students.',
         timestamp: new Date().toISOString(),
       };
 

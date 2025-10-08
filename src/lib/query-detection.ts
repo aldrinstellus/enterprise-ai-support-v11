@@ -27,6 +27,14 @@ import {
   messageComposerDemo,
   passwordResetArticleDemo,
   passwordResetEscalationDemo,
+  accountUnlockSuccessDemo,
+  accountUnlockEscalationDemo,
+  multiSystemAccessResolvedDemo,
+  multiSystemAccessPartialDemo,
+  profileUpdateSuccessDemo,
+  profileUpdateEscalationDemo,
+  courseUpdateSuccessDemo,
+  courseUpdateEscalationDemo,
 } from '@/data/demo-widget-data';
 
 export interface QueryMatch {
@@ -329,6 +337,85 @@ function detectAgentQuery(q: string): QueryMatch | null {
       widgetType: 'escalation-path',
       widgetData: passwordResetEscalationDemo,
       responseText: "I understand you need additional assistance. Let me escalate this to a human agent right away. I've created a Jira issue and notified our CS team via email and SMS. Sarah Chen will reach out within 15 minutes to help resolve this.",
+    };
+  }
+
+  // ACCOUNT UNLOCK DEMO FLOW
+  // Step 1: Initial account unlock request
+  if (
+    (q.includes('unlock') && q.includes('account')) ||
+    q.includes('account locked') ||
+    q.includes('cant access') ||
+    q.includes('cannot access') ||
+    q.includes('account is locked')
+  ) {
+    return {
+      widgetType: 'response-composer',
+      widgetData: accountUnlockSuccessDemo,
+      responseText: "Let me check your account status and verify if I can unlock it for you...",
+    };
+  }
+
+  // Step 2: Security escalation path (if severe security issues detected)
+  if (
+    q.includes('security issue') ||
+    q.includes('security flag') ||
+    q.includes('severe issue') ||
+    q.includes('suspicious activity') ||
+    (q.includes('detected') && q.includes('security'))
+  ) {
+    return {
+      widgetType: 'escalation-path',
+      widgetData: accountUnlockEscalationDemo,
+      responseText: "I've detected security concerns that require human review. Let me escalate this to our security team right away for your safety.",
+    };
+  }
+
+  // MULTI-SYSTEM ACCESS DEMO FLOW
+  // Detects when user reports issues with multiple systems (SharePoint, Slack, Email, etc.)
+  if (
+    (q.includes('sharepoint') && (q.includes('slack') || q.includes('email'))) ||
+    (q.includes('slack') && q.includes('email')) ||
+    q.includes('multiple systems') ||
+    q.includes('all systems') ||
+    (q.includes("can't access") && (q.includes('and') || q.includes(','))) ||
+    (q.includes('access') && q.includes('sharepoint') && q.includes('slack'))
+  ) {
+    // Default to fully resolved demo (user can manually trigger partial by asking for specific scenarios)
+    return {
+      widgetType: 'system-access-status',
+      widgetData: multiSystemAccessResolvedDemo,
+      responseText: "Let me check your access across all these systems and fix any issues I find...",
+    };
+  }
+
+  // INTERACTIVE UPDATE DEMO FLOW - Profile Updates
+  if (
+    (q.includes('update') && q.includes('profile')) ||
+    (q.includes('change') && q.includes('profile')) ||
+    q.includes('how do i update my profile') ||
+    q.includes('how to update profile') ||
+    (q.includes('edit') && q.includes('profile'))
+  ) {
+    return {
+      widgetType: 'interactive-update',
+      widgetData: profileUpdateSuccessDemo,
+      responseText: "I can help you update your profile! Let me show you what I can do automatically and what requires approval...",
+    };
+  }
+
+  // INTERACTIVE UPDATE DEMO FLOW - Course Updates
+  if (
+    (q.includes('update') && q.includes('course')) ||
+    (q.includes('change') && q.includes('course')) ||
+    q.includes('how do i update a course') ||
+    q.includes('how to update course') ||
+    (q.includes('edit') && q.includes('course'))
+  ) {
+    return {
+      widgetType: 'interactive-update',
+      widgetData: courseUpdateSuccessDemo,
+      responseText: "I can help you update course information! Let me load the current details and show you what can be changed...",
     };
   }
 
