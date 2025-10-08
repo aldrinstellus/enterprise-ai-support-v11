@@ -16,7 +16,8 @@ export interface QuickAction {
   label: string;
   badge: string | number;
   badgeColor: string;
-  query: string;
+  query?: string;
+  link?: string;
 }
 
 export interface Persona {

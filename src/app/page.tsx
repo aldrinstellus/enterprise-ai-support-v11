@@ -1086,21 +1086,39 @@ export default function Home() {
               <div className="space-y-2">
                 {currentPersona.quickActions.map((action) => {
                   const Icon = action.icon;
+                  const content = (
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <Icon className="h-4 w-4 flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <span className="text-foreground truncate">{action.label}</span>
+                      </div>
+                      <div className={`${action.badgeColor} px-2 py-0.5 rounded-full text-xs font-semibold ${action.badgeColor === 'bg-success' ? 'text-foreground' : 'text-white'} flex-shrink-0`}>
+                        {action.badge}
+                      </div>
+                    </div>
+                  );
+
+                  // If action has a link, render as anchor
+                  if (action.link) {
+                    return (
+                      <a
+                        key={action.id}
+                        href={action.link}
+                        className="w-full rounded-lg border border-border bg-card p-3 text-left text-sm hover:bg-muted transition-all duration-200 hover:shadow-md hover:border-primary/30 group block"
+                      >
+                        {content}
+                      </a>
+                    );
+                  }
+
+                  // Otherwise, render as button with query
                   return (
                     <button
                       key={action.id}
-                      onClick={() => handleSendMessage(action.query)}
+                      onClick={() => action.query && handleSendMessage(action.query)}
                       className="w-full rounded-lg border border-border bg-card p-3 text-left text-sm hover:bg-muted transition-all duration-200 hover:shadow-md hover:border-primary/30 group"
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <Icon className="h-4 w-4 flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
-                          <span className="text-foreground truncate">{action.label}</span>
-                        </div>
-                        <div className={`${action.badgeColor} px-2 py-0.5 rounded-full text-xs font-semibold ${action.badgeColor === 'bg-success' ? 'text-foreground' : 'text-white'} flex-shrink-0`}>
-                          {action.badge}
-                        </div>
-                      </div>
+                      {content}
                     </button>
                   );
                 })}

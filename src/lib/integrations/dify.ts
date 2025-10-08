@@ -202,6 +202,7 @@ export function getDifyClient(): DifyClient {
 
 /**
  * Smart KB search - uses chat for short queries, retrieval for long ones
+ * If Dify is not configured, returns a fallback message
  */
 export async function smartKBSearch(query: string, characterThreshold = 250): Promise<{
   method: 'chat' | 'retrieval';
@@ -209,6 +210,16 @@ export async function smartKBSearch(query: string, characterThreshold = 250): Pr
   context?: string;
   matches: number;
 }> {
+  // Check if Dify is configured
+  if (!process.env.DIFY_KB_ID || !process.env.DIFY_API_KEY) {
+    console.warn('[Dify] Not configured - returning fallback response');
+    return {
+      method: 'chat',
+      answer: 'Knowledge base search is not currently configured. AI will generate a response based on general knowledge.',
+      matches: 0,
+    };
+  }
+
   const client = getDifyClient();
 
   if (query.length <= characterThreshold) {

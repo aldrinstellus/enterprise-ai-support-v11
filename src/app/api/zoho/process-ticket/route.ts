@@ -125,21 +125,27 @@ export async function POST(req: NextRequest) {
     const categoryConfig = TICKET_CATEGORIES[classification.primary_category];
 
     if (classification.primary_category === 'DATA_GENERATION') {
-      // Direct to Jira for report requests
+      // Direct to Jira for report requests (if Jira is configured)
       timeline.push({
         step: 'create_jira_report',
         status: 'in_progress',
         timestamp: new Date().toISOString(),
       });
 
-      const jiraTicket = await jiraClient.createZohoEscalation({
-        title: `[REPORT] - ${extractedInfo.subject}`,
-        description: `Customer: ${payload.contact?.lastName || 'Unknown'} (${extractedInfo.customer_email})\n\nRequest:\n${extractedInfo.original_query}`,
-        zohoTicketId: ticketId,
-        zohoTicketUrl: payload.webUrl,
-        priority: payload.priority === 'High' ? 'High' : 'Medium',
-        customer: `${payload.contact?.lastName} (${extractedInfo.customer_email})`,
-      });
+      let jiraTicket = undefined;
+
+      if (jiraClient) {
+        jiraTicket = await jiraClient.createZohoEscalation({
+          title: `[REPORT] - ${extractedInfo.subject}`,
+          description: `Customer: ${payload.contact?.lastName || 'Unknown'} (${extractedInfo.customer_email})\n\nRequest:\n${extractedInfo.original_query}`,
+          zohoTicketId: ticketId,
+          zohoTicketUrl: payload.webUrl,
+          priority: payload.priority === 'High' ? 'High' : 'Medium',
+          customer: `${payload.contact?.lastName} (${extractedInfo.customer_email})`,
+        });
+      } else {
+        console.warn('[Processing] Jira not configured - skipping Jira ticket creation');
+      }
 
       timeline[timeline.length - 1].status = 'completed';
       timeline[timeline.length - 1].duration = 800;
@@ -228,22 +234,26 @@ export async function POST(req: NextRequest) {
         timestamp: new Date().toISOString(),
       });
 
-      const createdJira = await jiraClient.createZohoEscalation({
-        title: extractedInfo.subject,
-        description: `User Query: ${optimizedQuery}\n\nAgent Response: ${aiResponse.text}`,
-        zohoTicketId: ticketId,
-        zohoTicketUrl: payload.webUrl,
-        priority: payload.priority === 'High' ? 'High' : 'Medium',
-        customer: `${payload.contact?.lastName} (${extractedInfo.customer_email})`,
-      });
+      if (jiraClient) {
+        const createdJira = await jiraClient.createZohoEscalation({
+          title: extractedInfo.subject,
+          description: `User Query: ${optimizedQuery}\n\nAgent Response: ${aiResponse.text}`,
+          zohoTicketId: ticketId,
+          zohoTicketUrl: payload.webUrl,
+          priority: payload.priority === 'High' ? 'High' : 'Medium',
+          customer: `${payload.contact?.lastName} (${extractedInfo.customer_email})`,
+        });
 
-      jiraTicket = {
-        key: createdJira.key,
-        id: createdJira.id,
-        url: createdJira.self,
-        summary: extractedInfo.subject,
-        created: new Date().toISOString(),
-      };
+        jiraTicket = {
+          key: createdJira.key,
+          id: createdJira.id,
+          url: createdJira.self,
+          summary: extractedInfo.subject,
+          created: new Date().toISOString(),
+        };
+      } else {
+        console.warn('[Processing] Jira not configured - skipping escalation ticket creation');
+      }
 
       timeline[timeline.length - 1].status = 'completed';
       timeline[timeline.length - 1].duration = 800;

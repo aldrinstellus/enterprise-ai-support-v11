@@ -191,16 +191,15 @@ export class JiraClient {
 /**
  * Create Jira client from environment variables
  */
-export function createJiraClient(): JiraClient {
+export function createJiraClient(): JiraClient | null {
   const baseUrl = process.env.JIRA_BASE_URL;
   const email = process.env.JIRA_EMAIL;
   const apiToken = process.env.JIRA_API_TOKEN;
   const projectKey = process.env.JIRA_PROJECT_KEY;
 
   if (!baseUrl || !email || !apiToken || !projectKey) {
-    throw new Error(
-      'Missing Jira configuration. Required env vars: JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN, JIRA_PROJECT_KEY'
-    );
+    console.warn('[Jira] Configuration missing - Jira integration disabled');
+    return null;
   }
 
   return new JiraClient({
@@ -214,10 +213,10 @@ export function createJiraClient(): JiraClient {
 /**
  * Singleton instance
  */
-let jiraClient: JiraClient | null = null;
+let jiraClient: JiraClient | null | undefined;
 
-export function getJiraClient(): JiraClient {
-  if (!jiraClient) {
+export function getJiraClient(): JiraClient | null {
+  if (jiraClient === undefined) {
     jiraClient = createJiraClient();
   }
   return jiraClient;

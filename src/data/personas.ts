@@ -24,6 +24,7 @@ import {
   LayoutDashboard,
   Award,
   UserCog,
+  Ticket,
 
 } from 'lucide-react';
 import { Persona } from '@/types/persona';
@@ -196,6 +197,14 @@ export const personas: Persona[] = [
         badge: 3,
         badgeColor: 'bg-destructive',
         query: 'Show me tickets at risk of SLA breach',
+      },
+      {
+        id: 'view-tickets',
+        icon: Ticket,
+        label: 'Live Tickets Dashboard',
+        badge: 'New',
+        badgeColor: 'bg-blue-500',
+        link: '/demo/tickets',
       },
       {
         id: 'capacity',
