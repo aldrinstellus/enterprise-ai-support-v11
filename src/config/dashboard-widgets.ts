@@ -8,6 +8,7 @@ export interface DashboardWidget {
   description: string;
   query: string;
   icon?: string;
+  link?: string;
 }
 
 export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
@@ -57,6 +58,14 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
   ],
 
   'cs-manager': [
+    {
+      id: 'live-tickets',
+      type: 'ticket-list',
+      title: 'Live Tickets Dashboard',
+      description: 'View real-time Zoho Desk tickets',
+      query: 'Show me the live tickets dashboard',
+      link: '/demo/tickets',
+    },
     {
       id: 'team-workload',
       type: 'team-workload-dashboard',

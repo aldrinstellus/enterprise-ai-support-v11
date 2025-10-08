@@ -45,7 +45,12 @@ export function CommandPalette({ isOpen, onClose, widgets, onWidgetClick }: Comm
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (filteredWidgets[selectedIndex]) {
-          onWidgetClick(filteredWidgets[selectedIndex].query);
+          const widget = filteredWidgets[selectedIndex];
+          if (widget.link) {
+            window.location.href = widget.link;
+          } else {
+            onWidgetClick(widget.query);
+          }
           onClose();
         }
       } else if (e.key === 'Escape') {
@@ -111,7 +116,11 @@ export function CommandPalette({ isOpen, onClose, widgets, onWidgetClick }: Comm
                     <button
                       key={widget.id}
                       onClick={() => {
-                        onWidgetClick(widget.query);
+                        if (widget.link) {
+                          window.location.href = widget.link;
+                        } else {
+                          onWidgetClick(widget.query);
+                        }
                         onClose();
                       }}
                       className={`w-full px-4 py-3 flex items-center justify-between transition-colors ${
