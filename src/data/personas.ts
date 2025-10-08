@@ -52,6 +52,14 @@ export const personas: Persona[] = [
     },
     quickActions: [
       {
+        id: 'live-tickets',
+        icon: Ticket,
+        label: 'Live Tickets Dashboard',
+        badge: 'New',
+        badgeColor: 'bg-blue-500',
+        query: 'Show me all my current tickets from Zoho Desk',
+      },
+      {
         id: 'sla-performance',
         icon: LayoutDashboard,
         label: 'SLA Performance',
@@ -151,6 +159,14 @@ export const personas: Persona[] = [
     },
     quickActions: [
       {
+        id: 'live-tickets',
+        icon: Ticket,
+        label: 'Live Tickets Dashboard',
+        badge: 'New',
+        badgeColor: 'bg-blue-500',
+        query: 'Show me all my current tickets from Zoho Desk',
+      },
+      {
         id: 'priority-customers',
         icon: AlertCircle,
         label: 'Priority Customers',
@@ -197,14 +213,6 @@ export const personas: Persona[] = [
         badge: 3,
         badgeColor: 'bg-destructive',
         query: 'Show me tickets at risk of SLA breach',
-      },
-      {
-        id: 'view-tickets',
-        icon: Ticket,
-        label: 'Live Tickets Dashboard',
-        badge: 'New',
-        badgeColor: 'bg-blue-500',
-        link: '/demo/tickets',
       },
       {
         id: 'capacity',
@@ -275,6 +283,14 @@ export const personas: Persona[] = [
       badgeRing: 'ring-green-500/30',
     },
     quickActions: [
+      {
+        id: 'live-tickets',
+        icon: Ticket,
+        label: 'Live Tickets Dashboard',
+        badge: 'New',
+        badgeColor: 'bg-blue-500',
+        query: 'Show me all my current tickets from Zoho Desk',
+      },
       {
         id: 'my-tickets',
         icon: Target,
