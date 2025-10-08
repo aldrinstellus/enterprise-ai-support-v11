@@ -6,6 +6,7 @@ import {
   meetingSchedulerDemo,
   teamWorkloadDashboardDemo,
   customerRiskListDemo,
+  ticketDetailDemo,
 } from '@/data/demo-widget-data';
 
 export interface ConversationEntry {
@@ -140,6 +141,20 @@ const conversationEntries: ConversationEntry[] = [
     widgetType: 'customer-risk-list',
     widgetData: customerRiskListDemo,
   },
+
+  // Ticket Detail (Click-to-view from Live Tickets Dashboard) - DISABLED
+  // This is now handled by the live query detection in detectManagerQuery
+  // which extracts the ticket number and fetches real data from Zoho
+  /*
+  {
+    id: 'ticket-detail',
+    triggers: ['details for ticket', 'ticket #', 'show me ticket'],
+    userQuery: 'Show me details for ticket #XXX',
+    aiResponse: 'Here are the complete details for this ticket:',
+    widgetType: 'ticket-detail',
+    widgetData: ticketDetailDemo,
+  },
+  */
 ];
 
 /**

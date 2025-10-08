@@ -6,16 +6,32 @@ import { InteractiveChat, type InteractiveChatRef } from './InteractiveChat';
 import { CommandPalette } from '../concepts/CommandPalette';
 import { usePersona } from '@/hooks/use-persona';
 import { useSidebar } from '@/contexts/SidebarContext';
+import { useQuickAction } from '@/contexts/QuickActionContext';
 import { getDashboardWidgets } from '@/config/dashboard-widgets';
 
 export function InteractiveChatWithFloatingInput() {
   const { currentPersona } = usePersona();
   const { sidebarOpen } = useSidebar();
+  const { quickActionQuery, setQuickActionQuery } = useQuickAction();
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const chatRef = useRef<InteractiveChatRef>(null);
+  const processingQueryRef = useRef<string | null>(null);
   const widgets = getDashboardWidgets(currentPersona.id);
+
+  // Monitor QuickAction context for widget click events
+  useEffect(() => {
+    if (quickActionQuery && quickActionQuery !== processingQueryRef.current) {
+      processingQueryRef.current = quickActionQuery;
+      chatRef.current?.submitQuery(quickActionQuery);
+      setQuickActionQuery(null);
+      // Clear the processing ref after a brief delay
+      setTimeout(() => {
+        processingQueryRef.current = null;
+      }, 100);
+    }
+  }, [quickActionQuery, setQuickActionQuery]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

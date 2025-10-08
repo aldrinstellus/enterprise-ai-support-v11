@@ -167,7 +167,22 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 4. Ticket Detail (specific ticket numbers)
+  // 4. Live Zoho Tickets Dashboard
+  if (
+    q.includes('my current tickets') ||
+    q.includes('all my current tickets') ||
+    (q.includes('current tickets') && q.includes('zoho')) ||
+    (q.includes('live tickets') && q.includes('dashboard')) ||
+    q.includes('show me all my current tickets')
+  ) {
+    return {
+      widgetType: 'ticket-list',
+      widgetData: ticketListDemo,
+      responseText: "Here are the live tickets from Zoho Desk:",
+    };
+  }
+
+  // 5. Ticket Detail (specific ticket numbers) - LIVE FROM ZOHO
   if (
     q.includes('ticket #') ||
     q.includes('ticket number') ||
@@ -175,6 +190,19 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     (q.includes('show me ticket') && /\d+/.test(q)) ||
     (q.includes('details') && /\d+/.test(q))
   ) {
+    // Extract ticket number from query
+    const ticketNumberMatch = q.match(/#?(\d+)/);
+    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+
+    if (ticketNumber) {
+      return {
+        widgetType: 'live-ticket-detail',
+        widgetData: { ticketNumber },
+        responseText: `Here are the complete details for ticket #${ticketNumber} from Zoho Desk:`,
+      };
+    }
+
+    // Fallback to demo if no number found
     return {
       widgetType: 'ticket-detail',
       widgetData: ticketDetailDemo,
@@ -182,7 +210,7 @@ function detectCLevelQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 5. Meeting Scheduler
+  // 6. Meeting Scheduler
   if (
     q.includes('schedule') ||
     q.includes('book') ||
@@ -230,7 +258,55 @@ function detectManagerQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 2. Agent Performance Comparison
+  // 2. Live Zoho Tickets Dashboard
+  if (
+    q.includes('my current tickets') ||
+    q.includes('all my current tickets') ||
+    (q.includes('current tickets') && q.includes('zoho')) ||
+    (q.includes('live tickets') && q.includes('dashboard')) ||
+    q.includes('show me all my current tickets')
+  ) {
+    return {
+      widgetType: 'ticket-list',
+      widgetData: ticketListDemo,
+      responseText: "Here are the live tickets from Zoho Desk:",
+    };
+  }
+
+  // 2.5. Ticket Detail (specific ticket numbers) - LIVE FROM ZOHO
+  if (
+    q.includes('ticket #') ||
+    q.includes('ticket number') ||
+    (q.includes('show me ticket') && /\d+/.test(q)) ||
+    (q.includes('details') && /\d+/.test(q)) ||
+    (q.includes('show me details for ticket') && /\d+/.test(q))
+  ) {
+    // Extract ticket number from query
+    const ticketNumberMatch = q.match(/#?(\d+)/);
+    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+
+    console.log('[Query Detection - CS Manager] Ticket detail detected. Query:', q);
+    console.log('[Query Detection - CS Manager] Extracted ticket number:', ticketNumber);
+
+    if (ticketNumber) {
+      const result = {
+        widgetType: 'live-ticket-detail',
+        widgetData: { ticketNumber },
+        responseText: `Here are the complete details for ticket #${ticketNumber} from Zoho Desk:`,
+      };
+      console.log('[Query Detection - CS Manager] Returning:', result);
+      return result;
+    }
+
+    // Fallback to demo if no number found
+    return {
+      widgetType: 'ticket-detail',
+      widgetData: ticketDetailDemo,
+      responseText: "Here are the complete details for this ticket:",
+    };
+  }
+
+  // 3. Agent Performance Comparison
   if (
     q.includes('top and bottom performers') ||
     q.includes('performance comparison') ||
@@ -457,13 +533,27 @@ function detectAgentQuery(q: string): QueryMatch | null {
     };
   }
 
-  // 2. Ticket Detail
+  // 2. Ticket Detail - LIVE FROM ZOHO
   if (
     q.includes('ticket #') ||
     q.includes('ticket number') ||
     (q.includes('show me ticket') && /\d+/.test(q)) ||
-    (q.includes('details') && /\d+/.test(q))
+    (q.includes('details') && /\d+/.test(q)) ||
+    (q.includes('show me details for ticket') && /\d+/.test(q))
   ) {
+    // Extract ticket number from query
+    const ticketNumberMatch = q.match(/#?(\d+)/);
+    const ticketNumber = ticketNumberMatch ? ticketNumberMatch[1] : null;
+
+    if (ticketNumber) {
+      return {
+        widgetType: 'live-ticket-detail',
+        widgetData: { ticketNumber },
+        responseText: `Here are the complete details for ticket #${ticketNumber} from Zoho Desk:`,
+      };
+    }
+
+    // Fallback to demo if no number found
     return {
       widgetType: 'ticket-detail',
       widgetData: ticketDetailDemo,

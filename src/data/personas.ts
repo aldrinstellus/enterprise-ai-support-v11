@@ -64,7 +64,7 @@ export const personas: Persona[] = [
         icon: LayoutDashboard,
         label: 'SLA Performance',
         badge: '92%',
-        badgeColor: 'bg-success text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'Show me SLA performance dashboard for this quarter',
       },
       {
@@ -72,7 +72,7 @@ export const personas: Persona[] = [
         icon: TrendingDown,
         label: 'Churn Risk',
         badge: 5,
-        badgeColor: 'bg-destructive text-white',
+        badgeColor: 'bg-red-600 text-white',
         query: 'Which customers are at highest risk of churning?',
       },
       {
@@ -88,7 +88,7 @@ export const personas: Persona[] = [
         icon: Award,
         label: 'Board Metrics',
         badge: 'Ready',
-        badgeColor: 'bg-chart-3 text-white',
+        badgeColor: 'bg-cyan-500 text-white',
         query: 'Prepare metrics for board meeting presentation',
       },
       {
@@ -96,7 +96,7 @@ export const personas: Persona[] = [
         icon: Target,
         label: 'High-Value Accounts',
         badge: 18,
-        badgeColor: 'bg-chart-4 text-white',
+        badgeColor: 'bg-orange-500 text-white',
         query: 'Show me status of top 20 high-value customer accounts',
       },
       {
@@ -104,7 +104,7 @@ export const personas: Persona[] = [
         icon: GitBranch,
         label: 'Strategic Initiatives',
         badge: 8,
-        badgeColor: 'bg-chart-2 text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'Show me progress on strategic initiatives and OKRs',
       },
     ],
@@ -171,7 +171,7 @@ export const personas: Persona[] = [
         icon: AlertCircle,
         label: 'Priority Customers',
         badge: 12,
-        badgeColor: 'bg-destructive text-white',
+        badgeColor: 'bg-red-600 text-white',
         query: 'Show me all high-priority customers needing attention',
       },
       {
@@ -187,7 +187,7 @@ export const personas: Persona[] = [
         icon: TrendingDown,
         label: 'Most Slacking Agent',
         badge: '!',
-        badgeColor: 'bg-chart-4 text-white',
+        badgeColor: 'bg-orange-500 text-white',
         query: 'Who is my most slacking agent this week?',
       },
       {
@@ -195,7 +195,7 @@ export const personas: Persona[] = [
         icon: Award,
         label: 'Top Performing Agent',
         badge: '⭐',
-        badgeColor: 'bg-success text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'Who is my top performing agent this week?',
       },
       {
@@ -203,7 +203,7 @@ export const personas: Persona[] = [
         icon: UsersIcon,
         label: 'Workload Balance',
         badge: 'View',
-        badgeColor: 'bg-chart-3 text-white',
+        badgeColor: 'bg-cyan-500 text-white',
         query: 'Show me agent workload distribution and recommend reassignments',
       },
       {
@@ -211,7 +211,7 @@ export const personas: Persona[] = [
         icon: Clock,
         label: 'SLA Breach Alerts',
         badge: 3,
-        badgeColor: 'bg-destructive text-white',
+        badgeColor: 'bg-red-600 text-white',
         query: 'Show me tickets at risk of SLA breach',
       },
       {
@@ -219,7 +219,7 @@ export const personas: Persona[] = [
         icon: Activity,
         label: 'Team Capacity',
         badge: '78%',
-        badgeColor: 'bg-chart-2 text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'Show me team capacity and forecast for next week',
       },
       {
@@ -227,7 +227,7 @@ export const personas: Persona[] = [
         icon: ArrowUpCircle,
         label: 'Escalation Queue',
         badge: 7,
-        badgeColor: 'bg-chart-4 text-white',
+        badgeColor: 'bg-orange-500 text-white',
         query: 'Show me all escalated tickets requiring manager attention',
       },
     ],
@@ -296,7 +296,7 @@ export const personas: Persona[] = [
         icon: Target,
         label: 'My Open Tickets',
         badge: 18,
-        badgeColor: 'bg-chart-4 text-white',
+        badgeColor: 'bg-orange-500 text-white',
         query: 'Show me all my currently open support tickets',
       },
       {
@@ -304,7 +304,7 @@ export const personas: Persona[] = [
         icon: Zap,
         label: 'AI-Resolved Today',
         badge: 23,
-        badgeColor: 'bg-success text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'How many tickets did AI resolve for me today?',
       },
       {
@@ -312,7 +312,7 @@ export const personas: Persona[] = [
         icon: ArrowUpCircle,
         label: 'Escalated to Me',
         badge: 5,
-        badgeColor: 'bg-destructive text-white',
+        badgeColor: 'bg-red-600 text-white',
         query: 'Show me tickets escalated to me that need my attention',
       },
       {
@@ -320,7 +320,7 @@ export const personas: Persona[] = [
         icon: Calendar,
         label: "Today's Meetings",
         badge: 3,
-        badgeColor: 'bg-chart-3 text-white',
+        badgeColor: 'bg-cyan-500 text-white',
         query: 'Show me my scheduled customer meetings for today',
       },
       {
@@ -328,7 +328,7 @@ export const personas: Persona[] = [
         icon: GitBranch,
         label: 'Jira Sync Status',
         badge: '✓',
-        badgeColor: 'bg-chart-2 text-white',
+        badgeColor: 'bg-green-600 text-white',
         query: 'Show me status of Jira issues linked to my tickets',
       },
       {
@@ -336,7 +336,7 @@ export const personas: Persona[] = [
         icon: Bell,
         label: 'High-Priority Alerts',
         badge: 7,
-        badgeColor: 'bg-destructive text-white',
+        badgeColor: 'bg-red-600 text-white',
         query: 'Show me my urgent tickets and critical alerts',
       },
     ],

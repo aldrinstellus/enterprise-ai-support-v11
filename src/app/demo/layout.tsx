@@ -39,8 +39,6 @@ function DemoLayoutContent({ children }: { children: React.ReactNode }) {
 
   const handleQuickAction = (query: string) => {
     setQuickActionQuery(query);
-    // Clear after a brief moment to allow child to consume it
-    setTimeout(() => setQuickActionQuery(null), 200);
   };
 
   const handleNewConversation = () => {

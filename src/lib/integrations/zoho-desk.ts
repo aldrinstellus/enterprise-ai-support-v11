@@ -69,7 +69,7 @@ export class ZohoDeskClient {
   /**
    * Make authenticated API request
    */
-  private async request<T>(
+  async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {

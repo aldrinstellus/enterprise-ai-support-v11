@@ -24,12 +24,14 @@ interface TicketListDemoProps {
   limit?: number;
   autoRefresh?: boolean;
   refreshInterval?: number;
+  onTicketClick?: (ticketNumber: string) => void;
 }
 
 export function TicketListDemo({
   limit = 20,
   autoRefresh = false,
   refreshInterval = 30000,
+  onTicketClick,
 }: TicketListDemoProps) {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
@@ -151,6 +153,32 @@ export function TicketListDemo({
         </button>
       </div>
 
+      {/* Stats Cards */}
+      <div className="grid grid-cols-4 gap-4">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground">Total Tickets</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{tickets.length}</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground">High Priority</p>
+          <p className="text-2xl font-bold text-red-600 mt-1">
+            {tickets.filter((t) => t.priority === 'High').length}
+          </p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground">Open</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">
+            {tickets.filter((t) => t.status === 'Open').length}
+          </p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground">Email Channel</p>
+          <p className="text-2xl font-bold text-blue-600 mt-1">
+            {tickets.filter((t) => t.channel === 'Email').length}
+          </p>
+        </div>
+      </div>
+
       {/* Tickets Table */}
       <div className="rounded-lg border border-border bg-card overflow-hidden">
         <div className="overflow-x-auto">
@@ -184,6 +212,7 @@ export function TicketListDemo({
               {tickets.map((ticket) => (
                 <tr
                   key={ticket.id}
+                  onClick={() => onTicketClick?.(ticket.ticketNumber)}
                   className="hover:bg-muted/30 transition-colors cursor-pointer"
                 >
                   <td className="px-4 py-4 whitespace-nowrap">
@@ -250,32 +279,6 @@ export function TicketListDemo({
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* Footer Stats */}
-      <div className="grid grid-cols-4 gap-4">
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Total Tickets</p>
-          <p className="text-2xl font-bold text-foreground mt-1">{tickets.length}</p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-sm text-muted-foreground">High Priority</p>
-          <p className="text-2xl font-bold text-red-600 mt-1">
-            {tickets.filter((t) => t.priority === 'High').length}
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Open</p>
-          <p className="text-2xl font-bold text-green-600 mt-1">
-            {tickets.filter((t) => t.status === 'Open').length}
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-sm text-muted-foreground">Email Channel</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">
-            {tickets.filter((t) => t.channel === 'Email').length}
-          </p>
         </div>
       </div>
     </div>

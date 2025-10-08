@@ -108,6 +108,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
     if (match) {
       await handleMatch(match, query);
     } else {
+
       // No match found - helpful response
       await simulateAIResponse('I can help with that.');
       const fallbackMessage: Message = {
@@ -141,18 +142,6 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
   }, []);
 
   // No auto-scroll - user has full manual control
-
-  // Handle Quick Action queries from sidebar
-  useEffect(() => {
-    if (quickActionQuery) {
-      setInputValue(quickActionQuery);
-      // Auto-submit after setting the value
-      setTimeout(() => {
-        const form = inputRef.current?.closest('form');
-        form?.requestSubmit();
-      }, 100);
-    }
-  }, [quickActionQuery]);
 
   // Handle URL query parameter (from dashboard widget clicks)
   useEffect(() => {
@@ -280,6 +269,8 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
 
     // Show widget after typing completes
     if (match.widgetType && match.widgetData) {
+      console.log('[InteractiveChat] Widget detected:', match.widgetType);
+      console.log('[InteractiveChat] Widget data:', match.widgetData);
       await new Promise((resolve) => setTimeout(resolve, 400));
       const widgetMessage: Message = {
         id: `widget-${Date.now()}`,
@@ -288,6 +279,7 @@ export const InteractiveChat = forwardRef<InteractiveChatRef, InteractiveChatPro
         widgetData: match.widgetData,
         timestamp: new Date(),
       };
+      console.log('[InteractiveChat] Adding widget message:', widgetMessage);
       setMessages((prev) => [...prev, widgetMessage]);
     }
   };

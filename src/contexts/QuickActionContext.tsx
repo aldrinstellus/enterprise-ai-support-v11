@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 
 interface QuickActionContextType {
   quickActionQuery: string | null;
@@ -12,8 +12,13 @@ const QuickActionContext = createContext<QuickActionContextType | undefined>(und
 export function QuickActionProvider({ children }: { children: ReactNode }) {
   const [quickActionQuery, setQuickActionQuery] = useState<string | null>(null);
 
+  const value = useMemo(
+    () => ({ quickActionQuery, setQuickActionQuery }),
+    [quickActionQuery]
+  );
+
   return (
-    <QuickActionContext.Provider value={{ quickActionQuery, setQuickActionQuery }}>
+    <QuickActionContext.Provider value={value}>
       {children}
     </QuickActionContext.Provider>
   );

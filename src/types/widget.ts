@@ -13,6 +13,7 @@ export type WidgetType =
   | 'agent-performance-comparison'
   | 'agent-dashboard'
   | 'ticket-detail'
+  | 'live-ticket-detail'
   | 'meeting-scheduler'
   | 'message-composer'
   | 'call-prep-notes'
@@ -829,6 +830,11 @@ export interface TicketProcessingData {
   };
 }
 
+// Live Ticket Detail Widget Data (from Zoho Desk API)
+export interface LiveTicketDetailData {
+  ticketNumber: string;
+}
+
 // Union type for all widget data
 export type WidgetData =
   | ExecutiveSummaryData
@@ -840,6 +846,7 @@ export type WidgetData =
   | SLAPerformanceChartData
   | AgentDashboardData
   | TicketDetailData
+  | LiveTicketDetailData
   | TicketListData
   | AgentPerformanceComparisonData
   | CustomerRiskListData

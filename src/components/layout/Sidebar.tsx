@@ -51,8 +51,8 @@ export function Sidebar({
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         } transition-opacity duration-200`}
       >
-      {/* New Conversation Button */}
-      <div className="p-4 border-b border-border">
+      {/* Fixed Top: New Conversation Button */}
+      <div className="flex-shrink-0 p-4 border-b border-border">
         <button
           onClick={onNewConversation}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium text-foreground transition-colors"
@@ -62,115 +62,117 @@ export function Sidebar({
         </button>
       </div>
 
-      {/* Recent Conversations */}
-      <div className="px-4 py-3 border-b border-border">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          Recent Conversations
-        </div>
-        {messageCount === 0 ? (
-          <div className="text-xs text-muted-foreground/60 py-4 text-center">
-            No conversations yet
+      {/* Scrollable Middle Section: Recent Conversations + Quick Actions */}
+      <div className="flex-1 overflow-y-auto" style={{ scrollbarGutter: 'stable' }}>
+        {/* Recent Conversations */}
+        <div className="px-4 py-3 border-b border-border">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            Recent Conversations
           </div>
-        ) : (
-          <div className="space-y-2">
-            <div className="rounded-lg border border-border/50 bg-background/50 p-3">
-              <div className="flex items-start justify-between gap-2 mb-1">
-                <span className="text-xs font-medium text-foreground">Current Session</span>
-                <span className="text-xs text-muted-foreground">{messageCount} msgs</span>
-              </div>
-              {conversationPreview && (
-                <p className="text-xs text-muted-foreground/80 truncate">
-                  {conversationPreview}{conversationPreview.length >= 50 ? '...' : ''}
-                </p>
-              )}
+          {messageCount === 0 ? (
+            <div className="text-xs text-muted-foreground/60 py-4 text-center">
+              No conversations yet
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Quick Actions */}
-      <div className="px-4 py-3 border-b border-border">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 10V3L4 14h7v7l9-11h-7z"
-            />
-          </svg>
-          Quick Actions
-        </div>
-        <div className="space-y-1">
-          {quickActions.map((action) => {
-            const Icon = action.icon;
-            return (
-              <button
-                key={action.id}
-                onClick={() => action.query && onQuickAction?.(action.query)}
-                className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
-                  <span className="text-sm text-foreground truncate">{action.label}</span>
+          ) : (
+            <div className="space-y-2">
+              <div className="rounded-lg border border-border/50 bg-background/50 p-3">
+                <div className="flex items-start justify-between gap-2 mb-1">
+                  <span className="text-xs font-medium text-foreground">Current Session</span>
+                  <span className="text-xs text-muted-foreground">{messageCount} msgs</span>
                 </div>
-                <span
-                  className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${action.badgeColor}`}
+                {conversationPreview && (
+                  <p className="text-xs text-muted-foreground/80 truncate">
+                    {conversationPreview}{conversationPreview.length >= 50 ? '...' : ''}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="px-4 py-3 border-b border-border">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            Quick Actions
+          </div>
+          <div className="space-y-1">
+            {quickActions.map((action) => {
+              const Icon = action.icon;
+              return (
+                <button
+                  key={action.id}
+                  onClick={() => action.query && onQuickAction?.(action.query)}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-muted transition-colors group"
                 >
-                  {action.badge}
-                </span>
-              </button>
-            );
-          })}
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Icon className="w-4 h-4 text-muted-foreground group-hover:text-foreground flex-shrink-0" />
+                    <span className="text-sm text-foreground truncate">{action.label}</span>
+                  </div>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${action.badgeColor}`}
+                  >
+                    {action.badge}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      {/* Spacer */}
-      <div className="flex-1" />
-
-      {/* Reset Data */}
-      <div className="px-4 py-3 border-t border-border">
-        <button
-          onClick={onResetData}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+      {/* Fixed Bottom Section: Reset Data + User Profile */}
+      <div className="flex-shrink-0">
+        {/* Reset Data */}
+        <div className="px-4 py-3 border-t border-border">
+          <button
+            onClick={onResetData}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          Reset All Data
-        </button>
-      </div>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Reset All Data
+          </button>
+        </div>
 
-      {/* User Profile with Persona Selector */}
-      <div className="border-t border-border p-4">
+        {/* User Profile with Persona Selector */}
+        <div className="border-t border-border p-4">
         <div className="relative space-y-3">
           {/* Persona Badge */}
           <div className="w-full">
@@ -257,6 +259,7 @@ export function Sidebar({
               </motion.div>
             )}
           </AnimatePresence>
+        </div>
         </div>
       </div>
       </div>
