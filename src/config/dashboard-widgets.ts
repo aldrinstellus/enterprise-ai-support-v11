@@ -14,6 +14,13 @@ export interface DashboardWidget {
 export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
   'c-level': [
     {
+      id: 'live-tickets',
+      type: 'ticket-list',
+      title: 'Live Tickets Dashboard',
+      description: 'View real-time Zoho Desk tickets',
+      query: 'Show me all my current tickets from Zoho Desk',
+    },
+    {
       id: 'executive-summary',
       type: 'executive-summary',
       title: 'Executive Summary',
@@ -110,6 +117,13 @@ export const dashboardWidgets: Record<PersonaType, DashboardWidget[]> = {
   ],
 
   'support-agent': [
+    {
+      id: 'live-tickets',
+      type: 'ticket-list',
+      title: 'Live Tickets Dashboard',
+      description: 'View real-time Zoho Desk tickets',
+      query: 'Show me all my current tickets from Zoho Desk',
+    },
     {
       id: 'my-dashboard',
       type: 'agent-dashboard',
